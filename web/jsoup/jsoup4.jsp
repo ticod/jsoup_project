@@ -25,25 +25,32 @@
     String line = "";
     Document doc = null;
     List<String> list = new ArrayList<>();
+    List<String> list2 = new ArrayList<>();
 
     try {
         doc = Jsoup.connect(url).get();
         Elements body = doc.select(".tc");
+        Elements t12 = doc.select(".tl2.bdl");
 
         for (Element src : body) {
             list.add(src.html());
+        }
+        for (Element src : t12) {
+            list2.add(src.html());
         }
     } catch (IOException e) {
         e.printStackTrace();
     }
     pageContext.setAttribute("list", list);
+    pageContext.setAttribute("list2", list2);
 %>
 <table>
     <c:forEach items="${list}" var="v" varStatus="stat">
         <c:choose>
             <c:when test="${stat.index % 7 == 0}">
-                <tr><td rowspan="6">${v}</td>
-            </c:when>
+                <tr>
+                <td rowspan="6">${v}</td>
+                <td rowspan="6">${list2[stat.index/7]}</td>
             <c:when test="${stat.index % 7 == 1}">
                 <td>${v}</td></tr>
             </c:when>
